@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pop It! ASMR Game</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; background: #f0f8ff; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Bubble data
+        let bubbles = [];
+        const bubbleCount = 20;
+        const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFBE0B"];
+
+        // Create bubbles
+        function createBubbles() {
+            for (let i = 0; i < bubbleCount; i++) {
+                bubbles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: 30 + Math.random() * 20,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    popped: false
+                });
+            }
+        }
+
+        // Draw bubbles
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            bubbles.forEach(bubble => {
+                if (!bubble.popped) {
+                    ctx.beginPath();
+                    ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = bubble.color;
+                    ctx.fill();
+                }
+            });
+        }
+
+        // Handle taps (mobile-friendly)
+        canvas.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const x = e.touches[0].clientX - rect.left;
+            const y = e.touches[0].clientY - rect.top;
+            checkPop(x, y);
+        });
+
+        function checkPop(x, y) {
+            bubbles.forEach(bubble => {
+                const dist = Math.sqrt((x - bubble.x) ** 2 + (y - bubble.y) ** 2);
+                if (dist < bubble.radius && !bubble.popped) {
+                    bubble.popped = true;
+                    // Play sound (add later)
+                    setTimeout(() => {
+                        bubble.x = Math.random() * canvas.width;
+                        bubble.y = Math.random() * canvas.height;
+                        bubble.popped = false;
+                    }, 500); // Respawn after 0.5s
+                }
+            });
+            draw();
+        }
+
+        // Init
+        createBubbles();
+        draw();
+    </script>
+</body>
+</html>
