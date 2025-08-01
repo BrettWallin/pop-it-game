@@ -6,6 +6,7 @@ let bubbles = [];
 const bubbleCount = 5;
 const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFBE0B"];
 
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const gameBoard = document.getElementById("gameBoard");
@@ -15,8 +16,26 @@ const menu = document.getElementById("menu");
 const endScreen = document.getElementById("endScreen");
 const finalScore = document.getElementById("finalScore");
 
-canvas.width = gameBoard.clientWidth;
-canvas.height = gameBoard.clientHeight;
+function resizeCanvas() {
+    // Get the available size for the canvas (subtracting any padding/margins as needed)
+    const dpr = window.devicePixelRatio || 1;
+    // Use the actual rendered size of the gameBoard
+    const rect = gameBoard.getBoundingClientRect();
+    // Set canvas CSS size
+    canvas.style.width = rect.width + "px";
+    canvas.style.height = rect.height + "px";
+    // Set canvas pixel size for crisp rendering
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+    ctx.scale(dpr, dpr);
+}
+
+window.addEventListener("resize", () => {
+    if (gameBoard.style.display !== "none") {
+        resizeCanvas();
+    }
+});
 
 function playPopSound() {
     popSound.currentTime = 0;
@@ -41,9 +60,8 @@ function startGame() {
     updateScore(0);
     timerDisplay.innerText = `Time: ${timer}`;
 
-    // Set canvas dimensions
-    canvas.width = gameBoard.clientWidth;
-    canvas.height = gameBoard.clientHeight;
+    // Responsive canvas
+    resizeCanvas();
 
     // Create bubbles and start game loop
     createBubbles();
@@ -138,12 +156,29 @@ function updateGame() {
     });
 }
 
-canvas.addEventListener("mousedown", (e) => {
+
+function getCanvasCoords(e) {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    let x, y;
+    if (e.touches && e.touches.length > 0) {
+        x = e.touches[0].clientX - rect.left;
+        y = e.touches[0].clientY - rect.top;
+    } else {
+        x = e.clientX - rect.left;
+        y = e.clientY - rect.top;
+    }
+    return { x, y };
+}
+
+canvas.addEventListener("mousedown", (e) => {
+    const { x, y } = getCanvasCoords(e);
     checkPop(x, y);
 });
+canvas.addEventListener("touchstart", (e) => {
+    const { x, y } = getCanvasCoords(e);
+    checkPop(x, y);
+    e.preventDefault();
+}, { passive: false });
 
 function checkPop(x, y) {
     bubbles.forEach(bubble => {
