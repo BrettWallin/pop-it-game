@@ -93,7 +93,7 @@ function updateTimer() {
 }
 
 function createBubbles() {
-    const maxBubbles = 10;
+    const maxBubbles = 15;
     let attempts = 0;
     while (bubbles.length < maxBubbles && attempts < 1000) {
         const radius = Math.random() * 20 + 20;

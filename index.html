@@ -7,13 +7,10 @@
         body {
             margin: 0;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            display: block;
+            min-height: 100vh;
             background: #181818;
-            padding-bottom: 48px;
+            padding-bottom: 80px; /* More room at the bottom for ads or spacing */
         }
         #logo {
             margin-top: 10px;
@@ -37,6 +34,12 @@
             border-radius: 0;
             box-shadow: none;
             padding: 32px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
         }
         #endScreen {
             display: none;
@@ -53,6 +56,7 @@
             display: none; /* Hide the game board by default */
             background: #222;
             box-shadow: 0 0 24px #181818;
+            margin: 0 auto;
         }
         #colorLegend {
             background: #222;
@@ -129,7 +133,7 @@
 <body>
     <!-- Main Menu -->
     <div id="menu">
-        <img id="logo" src="assets/logo.png" alt="Game Logo">
+        <img id="logo" src="assets/logo.png" alt="Game Logo" style="cursor:pointer;">
         <!-- colorLegendMenu moved below buttons -->
         <button class="button" onclick="startGame()">Start Game</button>
         <button class="button" onclick="removeAds()">Remove Ads</button>
@@ -144,24 +148,26 @@
 
     <!-- Logo above game screen -->
     <div id="gameLogo" style="display:none; width:100%; text-align:center; margin:0; padding:0;">
-        <img src="assets/logo.png" alt="Game Logo" style="width:220px; height:auto; margin:0; padding:0; margin-top:8px;" />
+        <img id="gameLogoImg" src="assets/logo.png" alt="Game Logo" style="width:220px; height:auto; margin:0; padding:0; margin-top:8px; cursor:pointer;" />
     </div>
-    <div id="gameInfo" style="display: none; justify-content: center; text-align: center;">
+    <div id="gameInfo" style="display: none; justify-content: center; text-align: center; margin-top: 0;">
         <div id="timer">Time: 30</div>
         <div id="score">Score: 0</div>
     </div>
     <!-- Game Board -->
-    <div id="gameBoard" style="margin-bottom: 48px; margin-top: 0;">
+    <div id="gameBoard">
         <canvas id="gameCanvas"></canvas>
     </div>
 
     <!-- End Screen -->
     <div id="endScreen">
-        <h1 style="color:#fff;">Game Over</h1>
-        <p id="finalScore" style="color:#fff;">Your Score: 0</p>
-        <button class="button" onclick="startGame()">Play Again</button>
-        <button class="button" onclick="showMenu()">Return to Menu</button>
-        <button class="button" onclick="viewHighScores()">View High Scores</button>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh;">
+            <h1 style="color:#fff;">Game Over</h1>
+            <p id="finalScore" style="color:#fff;">Your Score: 0</p>
+            <button class="button" onclick="startGame()">Play Again</button>
+            <button class="button" onclick="showMenu()">Return to Menu</button>
+            <button class="button" onclick="viewHighScores()">View High Scores</button>
+        </div>
     </div>
 
     <!-- High Scores -->
@@ -208,6 +214,14 @@
         document.getElementById('highScores').style.display = 'none';
     }
     window.showMenu = showMenu;
+
+    // Make logo clickable to return to home screen
+    document.addEventListener('DOMContentLoaded', function() {
+        var logo = document.getElementById('logo');
+        if (logo) logo.onclick = showMenu;
+        var gameLogoImg = document.getElementById('gameLogoImg');
+        if (gameLogoImg) gameLogoImg.onclick = showMenu;
+    });
     </script>
 </body>
 </html>
