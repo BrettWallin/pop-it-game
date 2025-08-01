@@ -93,11 +93,12 @@ function updateTimer() {
 }
 
 function createBubbles() {
-    const maxBubbles = 5;
+    const maxBubbles = 6;
     let attempts = 0;
     while (bubbles.length < maxBubbles && attempts < 1000) {
         const radius = Math.random() * 20 + 20;
-        const speed = radius > 35 ? 1 : radius > 25 ? 2 : 3;
+        // Speed up all balls a bit more
+        const speed = radius > 35 ? 2.1 : radius > 25 ? 3.1 : 4.3;
         const color = radius > 35 ? "#FF0000" : radius > 25 ? "#FFFF00" : "#00FF00";
         const x = Math.random() * (canvas.width - 2 * radius) + radius;
         const y = Math.random() * (canvas.height - 2 * radius) + radius;
@@ -133,7 +134,8 @@ function updateGame() {
         if (bubble.popped || bubble.y - bubble.radius > canvas.height) {
             // Replace popped or exited bubble
             const radius = Math.random() * 20 + 20;
-            const speed = radius > 35 ? 1 : radius > 25 ? 2 : 3;
+            // Speed up all balls a bit more
+            const speed = radius > 35 ? 2.1 : radius > 25 ? 3.1 : 4.3;
             const color = radius > 35 ? "#FF0000" : radius > 25 ? "#FFFF00" : "#00FF00"; // Red for big, Yellow for medium, Green for small
             bubbles[index] = {
                 x: Math.random() * canvas.width,
