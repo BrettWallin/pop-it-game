@@ -12,11 +12,11 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: #f0f8ff;
+            background: #181818;
         }
         #logo {
             margin-top: 10px;
-            width: 150px;
+            width: 220px;
             height: auto;
         }
         .button {
@@ -32,6 +32,10 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 32px 0;
         }
         #endScreen {
             display: none;
@@ -40,21 +44,47 @@
             position: relative;
             width: 90vw;
             height: 70vh;
-            border: 5px solid #333;
+            border: 6px solid #4ECDC4;
             overflow: hidden;
             display: none; /* Hide the game board by default */
+            background: #222;
+            box-shadow: 0 0 24px #181818;
+        }
+        #colorLegend {
+            background: #222;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-left: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 16px;
         }
         #gameInfo {
             display: flex;
-            justify-content: space-between;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
             width: 90vw;
             margin-top: 10px;
+            margin-bottom: 40px;
             font-family: Arial, sans-serif;
             font-size: 20px;
-            color: #333;
+            color: #fff;
+            gap: 32px;
         }
         #score, #timer {
             margin: 0 10px;
+            font-weight: bold;
+            color: #fff;
+            background: #222;
+            padding: 6px 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 2px solid #4ECDC4;
         }
         table {
             border-collapse: collapse;
@@ -67,14 +97,25 @@
             text-align: center;
         }
         th {
-            background-color: #f0f8ff;
+            background-color: #222;
+            color: #fff;
+        }
+        #highScores h1 {
+            color: #fff;
+        }
+        #highScores table {
+            color: #fff;
         }
         #highScores {
             display: flex;
-            flex-direction: column;
+            background: #181818;
             align-items: center;
             justify-content: center;
             text-align: center;
+            background: #222;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+            padding: 32px 0;
         }
         #highScores h1 {
             margin-bottom: 20px; /* Add spacing below the title */
@@ -90,19 +131,29 @@
         <button class="button" onclick="viewHighScores()">View High Scores</button>
     </div>
 
+    <!-- Logo above game screen -->
+    <div id="gameLogo" style="display:none; width:100%; text-align:center; margin-bottom:20px;">
+        <img src="assets/logo.png" alt="Game Logo" style="width:220px; height:auto;" />
+    </div>
     <!-- Game Board -->
     <div id="gameBoard">
         <canvas id="gameCanvas"></canvas>
     </div>
     <div id="gameInfo" style="display: none;">
-        <div id="score">Score: 0</div>
         <div id="timer">Time: 30</div>
+        <div id="score">Score: 0</div>
+        <div id="colorLegend">
+            <span><strong>Bubble Points:</strong></span>
+            <span style="color:#FF0000;">&#9679; Red (Big): 1</span>
+            <span style="color:#FFD700; text-shadow: 0 0 2px #000;">&#9679; Yellow (Medium): 2</span>
+            <span style="color:#00FF00;">&#9679; Green (Small): 3</span>
+        </div>
     </div>
 
     <!-- End Screen -->
     <div id="endScreen">
-        <h1>Game Over</h1>
-        <p id="finalScore">Your Score: 0</p>
+        <h1 style="color:#fff;">Game Over</h1>
+        <p id="finalScore" style="color:#fff;">Your Score: 0</p>
         <button class="button" onclick="startGame()">Play Again</button>
         <button class="button" onclick="showMenu()">Return to Menu</button>
         <button class="button" onclick="viewHighScores()">View High Scores</button>
@@ -125,5 +176,33 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+    // Show/hide logo above game screen when playing
+    function showGameLogo(show) {
+        var logoDiv = document.getElementById('gameLogo');
+        if (logoDiv) logoDiv.style.display = show ? 'block' : 'none';
+    }
+    // Patch startGame and endGame to show/hide logo
+    const origStartGame = window.startGame;
+    window.startGame = function() {
+        showGameLogo(true);
+        if (origStartGame) origStartGame();
+    };
+    const origEndGame = window.endGame;
+    window.endGame = function() {
+        showGameLogo(false);
+        if (origEndGame) origEndGame();
+    };
+    // Hide logo on menu
+    function showMenu() {
+        showGameLogo(false);
+        document.getElementById('menu').style.display = 'flex';
+        document.getElementById('endScreen').style.display = 'none';
+        document.getElementById('gameBoard').style.display = 'none';
+        document.getElementById('gameInfo').style.display = 'none';
+        document.getElementById('highScores').style.display = 'none';
+    }
+    window.showMenu = showMenu;
+    </script>
 </body>
 </html>
