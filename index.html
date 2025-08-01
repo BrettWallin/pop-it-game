@@ -43,8 +43,11 @@
         }
         #gameBoard {
             position: relative;
-            width: 90vw;
-            height: 70vh;
+            width: 96vw;
+            max-width: 600px;
+            height: calc(60vh - 32px);
+            max-height: 60vw;
+            min-height: 260px;
             border: 6px solid #4ECDC4;
             overflow: hidden;
             display: none; /* Hide the game board by default */
