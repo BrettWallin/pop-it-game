@@ -3,7 +3,7 @@ let score = 0;
 let timer = 30;
 let gameInterval, timerInterval;
 let bubbles = [];
-const bubbleCount = 20;
+const bubbleCount = 5;
 const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFBE0B"];
 
 const canvas = document.getElementById("gameCanvas");
@@ -75,18 +75,35 @@ function updateTimer() {
 }
 
 function createBubbles() {
-    while (bubbles.length < 10) { // Ensure a maximum of 10 bubbles
-        const radius = Math.random() * 20 + 20; // Random radius between 20 and 40
-        const speed = radius > 35 ? 1 : radius > 25 ? 2 : 3; // Big: slow, Medium: faster, Small: fastest
-        const color = radius > 35 ? "#FF0000" : radius > 25 ? "#FFFF00" : "#00FF00"; // Red for big, Yellow for medium, Green for small
-        bubbles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            radius,
-            color,
-            speed,
-            popped: false
-        });
+    const maxBubbles = 4;
+    let attempts = 0;
+    while (bubbles.length < maxBubbles && attempts < 1000) {
+        const radius = Math.random() * 20 + 20;
+        const speed = radius > 35 ? 1 : radius > 25 ? 2 : 3;
+        const color = radius > 35 ? "#FF0000" : radius > 25 ? "#FFFF00" : "#00FF00";
+        const x = Math.random() * (canvas.width - 2 * radius) + radius;
+        const y = Math.random() * (canvas.height - 2 * radius) + radius;
+        // Check for overlap
+        let overlapping = false;
+        for (let i = 0; i < bubbles.length; i++) {
+            const other = bubbles[i];
+            const dist = Math.sqrt((x - other.x) ** 2 + (y - other.y) ** 2);
+            if (dist < radius + other.radius + 4) { // 4px buffer
+                overlapping = true;
+                break;
+            }
+        }
+        if (!overlapping) {
+            bubbles.push({
+                x,
+                y,
+                radius,
+                color,
+                speed,
+                popped: false
+            });
+        }
+        attempts++;
     }
 }
 

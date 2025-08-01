@@ -13,6 +13,7 @@
             justify-content: center;
             height: 100vh;
             background: #181818;
+            padding-bottom: 48px;
         }
         #logo {
             margin-top: 10px;
@@ -126,28 +127,29 @@
     <!-- Main Menu -->
     <div id="menu">
         <img id="logo" src="assets/logo.png" alt="Game Logo">
+        <!-- colorLegendMenu moved below buttons -->
         <button class="button" onclick="startGame()">Start Game</button>
         <button class="button" onclick="removeAds()">Remove Ads</button>
         <button class="button" onclick="viewHighScores()">View High Scores</button>
-    </div>
-
-    <!-- Logo above game screen -->
-    <div id="gameLogo" style="display:none; width:100%; text-align:center; margin-bottom:20px;">
-        <img src="assets/logo.png" alt="Game Logo" style="width:220px; height:auto;" />
-    </div>
-    <!-- Game Board -->
-    <div id="gameBoard">
-        <canvas id="gameCanvas"></canvas>
-    </div>
-    <div id="gameInfo" style="display: none;">
-        <div id="timer">Time: 30</div>
-        <div id="score">Score: 0</div>
-        <div id="colorLegend">
-            <span><strong>Bubble Points:</strong></span>
+        <div id="colorLegendMenu" style="background:#181818; color:#fff; padding:12px 18px; border-radius:10px; font-size:16px; margin:18px 0; display:flex; flex-direction:column; align-items:flex-start; gap:6px; width:fit-content; margin-left:auto; margin-right:auto;">
+            <strong>Bubble Points:</strong>
             <span style="color:#FF0000;">&#9679; Red (Big): 1</span>
             <span style="color:#FFD700; text-shadow: 0 0 2px #000;">&#9679; Yellow (Medium): 2</span>
             <span style="color:#00FF00;">&#9679; Green (Small): 3</span>
         </div>
+    </div>
+
+    <!-- Logo above game screen -->
+    <div id="gameLogo" style="display:none; width:100%; text-align:center; margin:0; padding:0;">
+        <img src="assets/logo.png" alt="Game Logo" style="width:220px; height:auto; margin:0; padding:0; margin-top:8px;" />
+    </div>
+    <div id="gameInfo" style="display: none; justify-content: center; text-align: center;">
+        <div id="timer">Time: 30</div>
+        <div id="score">Score: 0</div>
+    </div>
+    <!-- Game Board -->
+    <div id="gameBoard" style="margin-bottom: 48px; margin-top: 0;">
+        <canvas id="gameCanvas"></canvas>
     </div>
 
     <!-- End Screen -->
